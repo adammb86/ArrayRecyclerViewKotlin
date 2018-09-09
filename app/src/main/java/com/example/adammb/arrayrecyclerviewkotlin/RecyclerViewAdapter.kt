@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_list.view.*
 
 class RecyclerViewAdapter(private val context: Context, private val items: List<Item>,private val listener: (Item) -> Unit)
     : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
@@ -21,13 +23,15 @@ class RecyclerViewAdapter(private val context: Context, private val items: List<
         holder.bindItem(items[position],listener)
     }
 
-    class ViewHolder(view: View):RecyclerView.ViewHolder(view) {
-        private val name = view.findViewById<TextView>(R.id.name)
-        private val image = view.findViewById<ImageView>(R.id.image)
+    class ViewHolder(containerView: View):RecyclerView.ViewHolder(containerView),
+            LayoutContainer{
+        override val containerView: View?
+            get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
         fun bindItem(items: Item, listener: (Item) -> Unit) {
-            name.text = items.name
-            Glide.with(itemView.context).load(items.image).into(image)
+            itemView.name.text = items.name
+            Glide.with(itemView.context).load(items.image).into(itemView.image)
+
 
             itemView.setOnClickListener{
                 listener(items)
