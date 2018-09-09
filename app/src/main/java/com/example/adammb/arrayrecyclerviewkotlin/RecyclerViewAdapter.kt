@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 
-class RecyclerViewAdapter(private val context: Context, private val items: List<Item>)
+class RecyclerViewAdapter(private val context: Context, private val items: List<Item>,private val listener: (Item) -> Unit)
     : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
 
@@ -18,16 +18,20 @@ class RecyclerViewAdapter(private val context: Context, private val items: List<
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItem(items[position])
+        holder.bindItem(items[position],listener)
     }
 
     class ViewHolder(view: View):RecyclerView.ViewHolder(view) {
         private val name = view.findViewById<TextView>(R.id.name)
         private val image = view.findViewById<ImageView>(R.id.image)
 
-        fun bindItem(items: Item) {
+        fun bindItem(items: Item, listener: (Item) -> Unit) {
             name.text = items.name
             Glide.with(itemView.context).load(items.image).into(image)
+
+            itemView.setOnClickListener{
+                listener(items)
+            }
         }
     }
 }
